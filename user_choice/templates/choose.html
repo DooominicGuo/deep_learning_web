@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+  {% load static %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+body {
+  font-family: Verdana, sans-serif;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.row > .column {
+  padding: 0 8px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.column {
+  margin-left: 7em;
+  float: left;
+  margin-right: 13em;
+  width: 33%;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: black;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  width: 90%;
+  max-width: 1200px;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mySlides {
+  display: none;
+  
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -50px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+img {
+  margin-bottom: -4px;
+}
+
+.caption-container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+}
+
+.demo {
+  opacity: 0.6;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+
+img.hover-shadow {
+  transition: 0.3s;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.button {
+  background-color: black; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
+<body>
+
+<h2 style="text-align:center" id = "headText">Please choose the network you think with the optimal structure. </h2>
+<button class="button" id = "backButton" onclick= "back()" >Go back to previous selection </button>
+<div class="row">
+  <div class="column">
+    <img id = "firstImage" src= "{% static "img/1.png" %}" style="width:100%" onclick="openModal();currentSlide(1)" class="hover-shadow cursor">
+  </div>
+  <div class="column">
+    <img id = "secondImage" src="{% static "img/2.png" %}" style="width:100%" onclick="openModal();currentSlide(2)" class="hover-shadow cursor">
+  </div>
+</div>
+<div class="row">
+  <div class="column">
+    <img id = "thirdImage" src= "{% static "img/3.png" %}" style="width:100%" onclick="openModal();currentSlide(3)" class="hover-shadow cursor">
+  </div>
+  <div class="column">
+    <img id = "fourthImage" src="{% static "img/4.png" %}" style="width:100%" onclick="openModal();currentSlide(4)" class="hover-shadow cursor">
+  </div>
+</div>
+
+<div id="myModal" class="modal">
+  <span class="close cursor" onclick="closeModal()">&times;</span>
+  <div class="modal-content">
+
+    <div class="mySlides">
+      <div class="numbertext">1 / 4</div>
+      <img id = "firstModalImage" src="{% static "img/1.png" %}" style="width:80%">
+    </div>
+
+    <div class="mySlides">
+      <div class="numbertext">2 / 4</div>
+      <img id = "secondModalImage" src="{% static "img/2.png" %}" style="width:80%">
+    </div>
+
+    <div class="mySlides">
+      <div class="numbertext">3 / 4</div>
+      <img id = "thirdModalImage" src="{% static "img/3.png" %}" style="width:80%">
+    </div>
+    
+    <div class="mySlides">
+      <div class="numbertext">4 / 4</div>
+      <img id = "fourthModalImage" src="{% static "img/4.png" %}" style="width:80%">
+    </div>
+    <button class="button" id = "selectButton" onclick= "select()">SELECT this network</button>
+    <button class="button" id = "submitButton" onclick = "beforeSubmit()">SUBMIT YOUR CHOICE.</button>
+    <form id="myform" method="post" action= "{% url 'choose' %}">
+      <label for="firstChoice"></label>
+      <input type="text" id = "firstChoice" name = "firstChoice" value="" />
+      <label for="secondChoice"></label>
+      <input type="text" id = "secondChoice" name = "secondChoice" value="" />
+      <label for="thirdChoice"></label>
+      <input type="text" id = "thirdChoice" name = "thirdChoice" value="" />
+      <button class = "button" type = "submit" id = "finalSubmitButton">Sure this is the network? Once submitted you cannot change your selection.</button>
+      {% csrf_token %}
+    </form>
+    
+    
+  </div>
+
+
+<script>
+  var slideIndex = 1;
+// we record four different choices based on these parameters.
+var countChoose = 0;
+var choices = [-1, -1, -1];
+var currIndex = '';
+function openModal() {
+  document.getElementById("myModal").style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("myModal").style.display = "none";
+  if (document.getElementById("finalSubmitButton").style.display == 'block') {
+    document.getElementById("finalSubmitButton").style.display = "none";
+    document.getElementById("submitButton").style.display = "block";
+  }
+}
+
+document.getElementById("submitButton").style.display = "none";
+document.getElementById("finalSubmitButton").style.display = "none";
+document.getElementById("firstChoice").style.display = "none";
+document.getElementById("secondChoice").style.display = "none";
+document.getElementById("thirdChoice").style.display = "none";
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+  }
+  slides[slideIndex-1].style.display = "block";
+
+}
+// there was some string concatenation I cannot deal with the contradiction of django and js so I use a dictionary to help me.
+// sry for the miserable code here.
+dictionary = {
+  1: '{% static "img/1.png" %}',
+  2: '{% static "img/2.png" %}',
+  3: '{% static "img/3.png" %}',
+  4: '{% static "img/4.png" %}',
+  11: '{% static "img/11.png" %}',
+  12: '{% static "img/12.png" %}',
+  13: '{% static "img/13.png" %}',
+  14: '{% static "img/14.png" %}',
+  21: '{% static "img/21.png" %}',
+  22: '{% static "img/22.png" %}',
+  23: '{% static "img/23.png" %}',
+  24: '{% static "img/24.png" %}',
+  31: '{% static "img/31.png" %}',
+  32: '{% static "img/32.png" %}',
+  33: '{% static "img/33.png" %}',
+  34: '{% static "img/34.png" %}',
+  41: '{% static "img/41.png" %}',
+  42: '{% static "img/42.png" %}',
+  43: '{% static "img/43.png" %}',
+  44: '{% static "img/44.png" %}',
+  111: '{% static "img/111.png" %}',
+  112: '{% static "img/112.png" %}',
+  113: '{% static "img/113.png" %}',
+  114: '{% static "img/114.png" %}',
+  121: '{% static "img/121.png" %}',
+  122: '{% static "img/122.png" %}',
+  123: '{% static "img/123.png" %}',
+  124: '{% static "img/124.png" %}',
+  131: '{% static "img/131.png" %}',
+  132: '{% static "img/132.png" %}',
+  133: '{% static "img/133.png" %}',
+  134: '{% static "img/134.png" %}',
+  141: '{% static "img/141.png" %}',
+  142: '{% static "img/142.png" %}',
+  143: '{% static "img/143.png" %}',
+  144: '{% static "img/144.png" %}',
+  211: '{% static "img/211.png" %}',
+  212: '{% static "img/212.png" %}',
+  213: '{% static "img/213.png" %}',
+  214: '{% static "img/214.png" %}',
+  221: '{% static "img/221.png" %}',
+  222: '{% static "img/222.png" %}',
+  223: '{% static "img/223.png" %}',
+  224: '{% static "img/224.png" %}',
+  231: '{% static "img/231.png" %}',
+  232: '{% static "img/232.png" %}',
+  233: '{% static "img/233.png" %}',
+  234: '{% static "img/234.png" %}',
+  241: '{% static "img/241.png" %}',
+  242: '{% static "img/242.png" %}',
+  243: '{% static "img/243.png" %}',
+  244: '{% static "img/244.png" %}',
+  311: '{% static "img/311.png" %}',
+  312: '{% static "img/312.png" %}',
+  313: '{% static "img/313.png" %}',
+  314: '{% static "img/314.png" %}',
+  321: '{% static "img/321.png" %}',
+  322: '{% static "img/322.png" %}',
+  323: '{% static "img/323.png" %}',
+  324: '{% static "img/324.png" %}',
+  331: '{% static "img/331.png" %}',
+  332: '{% static "img/332.png" %}',
+  333: '{% static "img/333.png" %}',
+  334: '{% static "img/334.png" %}',
+  341: '{% static "img/341.png" %}',
+  342: '{% static "img/342.png" %}',
+  343: '{% static "img/343.png" %}',
+  344: '{% static "img/344.png" %}',
+  411: '{% static "img/411.png" %}',
+  412: '{% static "img/412.png" %}',
+  413: '{% static "img/413.png" %}',
+  414: '{% static "img/414.png" %}',
+  421: '{% static "img/421.png" %}',
+  422: '{% static "img/422.png" %}',
+  423: '{% static "img/423.png" %}',
+  424: '{% static "img/424.png" %}',
+  431: '{% static "img/431.png" %}',
+  432: '{% static "img/432.png" %}',
+  433: '{% static "img/433.png" %}',
+  434: '{% static "img/434.png" %}',
+  441: '{% static "img/441.png" %}',
+  442: '{% static "img/442.png" %}',
+  443: '{% static "img/443.png" %}',
+  444: '{% static "img/444.png" %}',
+}
+
+function select() {
+   if (countChoose > 3) return;
+   choices[countChoose] = slideIndex;
+   countChoose = countChoose + 1;
+   currIndex = currIndex + slideIndex;
+   var firstId = currIndex + '1';
+   document.getElementById("firstImage").src = dictionary[parseInt(firstId)];
+   document.getElementById("firstModalImage").src = dictionary[parseInt(firstId)];
+   var secondId = currIndex + '2';
+   document.getElementById("secondImage").src = dictionary[parseInt(secondId)];
+   document.getElementById("secondModalImage").src = dictionary[parseInt(secondId)];
+   var thirdId = currIndex + '3';
+   document.getElementById("thirdImage").src = dictionary[parseInt(thirdId)];
+   document.getElementById("thirdModalImage").src = dictionary[parseInt(thirdId)];
+   var fourthId = currIndex + '4';
+   document.getElementById("fourthImage").src = dictionary[parseInt(fourthId)];
+   document.getElementById("fourthModalImage").src = dictionary[parseInt(fourthId)];
+   closeModal();
+   if (countChoose == 2) {
+     document.getElementById("selectButton").style.display = "none";
+     document.getElementById("submitButton").style.display = "block";
+   }
+}
+
+function beforeSubmit() {
+       // here we should also send data back.
+       choices[countChoose] = slideIndex;
+    document.getElementById("firstChoice").value = choices[0];
+    document.getElementById("secondChoice").value = choices[1];
+    document.getElementById("thirdChoice").value = choices[2];
+    document.getElementById("finalSubmitButton").style.display = "block";
+     document.getElementById("submitButton").style.display = "none";
+
+    return;
+}
+
+function back() {
+  if (countChoose == 0) {
+    return;
+  }
+  if (countChoose == 1) {
+    countChoose--;
+    document.getElementById("firstImage").src = dictionary[1];
+    document.getElementById("firstModalImage").src = dictionary[1];
+    document.getElementById("secondImage").src = dictionary[2] ;
+    document.getElementById("secondModalImage").src = dictionary[2] ;
+    document.getElementById("thirdImage").src = dictionary[3];
+    document.getElementById("thirdModalImage").src = dictionary[3];
+    document.getElementById("fourthImage").src = dictionary[4];
+    document.getElementById("fourthModalImage").src = dictionary[4];
+    currIndex = "";
+    choices[0] = -1;
+    return;
+  }
+  currIndex = currIndex.substring(0, currIndex.length - 1);
+  countChoose--;
+  choices[countChoose] = -1;
+  var firstId = currIndex + '1';
+  document.getElementById("firstImage").src = dictionary[parseInt(firstId)];
+  document.getElementById("firstModalImage").src = dictionary[parseInt(firstId)];
+  var secondId = currIndex + '2';
+  document.getElementById("secondImage").src = dictionary[parseInt(secondId)];
+  document.getElementById("secondModalImage").src = dictionary[parseInt(secondId)];
+  var thirdId = currIndex + '3';
+  document.getElementById("thirdImage").src = dictionary[parseInt(thirdId)];
+  document.getElementById("thirdModalImage").src = dictionary[parseInt(thirdId)];
+  var fourthId = currIndex + '4';
+  document.getElementById("fourthImage").src = dictionary[parseInt(fourthId)];
+  document.getElementById("fourthModalImage").src = dictionary[parseInt(fourthId)];
+  if (countChoose == 1) {
+     document.getElementById("selectButton").style.display = "block";
+     document.getElementById("submitButton").style.display = "none";
+   }
+}
+
+
+</script>
+    
+</body>
+</html>

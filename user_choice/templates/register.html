@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+    <head>
+	    <meta charset="utf-8">
+	    {% load static %}
+        <title>{% block title %} Socialnetwork {% endblock %} </title>
+    </head>
+    
+    <body>
+        <a href="{% url 'login' %}" id ="id_login_link">
+            <button>Login</button>
+        </a>
+        <p>REGISTER</p>
+        
+        <form method="post" action="{% url 'register' %}">
+            <table>
+                {% for field in form.visible_fields %}
+                    <tr>
+                        <td>{{field.label_tag}}</td>
+                        <td>{{field}}</td>
+                        <td class="error">
+                            {% for error in field.errors %} {{error}} {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% csrf_token %}
+            <button type="submit" id="id_register_button">Submit</button>
+        </form>
+    
+        {% for error in form.non_field_errors %}
+            <p class="error">
+                {{ error }}
+            </p>
+        {% endfor %}
+    
+
+        
+    </body>
+</html>
