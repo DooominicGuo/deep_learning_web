@@ -5,28 +5,84 @@
 	    {% load static %}
         <title>{% block title %} Socialnetwork {% endblock %} </title>
     </head>
+
+	<style>
+	table.center{
+	margin-left:auto;
+	margin-right:auto;
+	}
+	
+	.paraHeader{
+	font-size: xx-large;
+	text-align:center;
+	font-weight:bold;
+	margin-top: 30px;
+	}
+	
+	.textHeader{
+	font-weight:normal;
+	text-align:center;
+	}
+	
+	.buttonCenter{
+	text-align:center;
+	}
+	
+	.retToLogin{
+	margin-top: 100px;
+	}
+	
+	.regButton{
+	margin-top: 10px;
+	}
+	
+	.tableSpacer{
+	margin-top: 50px;
+	}
+	
+	.error{
+	font-weight:bold;
+	color:red;
+	margin-bottom:10px;
+	}
+	
+	</style>
     
-    <body>
+    <body style="text-align:center">
+		
+		<div class="retToLogin">
         <a href="{% url 'login' %}" id ="id_login_link">
-            <button>Login</button>
+            <button>Return to Login</button>
         </a>
-        <p>REGISTER</p>
-        
+		</div>
+		
+		<div>
+		<p class="paraHeader">Register for an Account</p>
+		<b class="textHeader">Fill in the form below to register for your XXXXXXXXXXX account.</b>
+		</div>
+		
+        <div class="tableSpacer">
         <form method="post" action="{% url 'register' %}">
-            <table>
+			<div class="error">
+			<b></b>
+			{% for field in form.visible_fields %}
+			<b class="error">{% for error in field.errors %} {{error}} {% endfor %}</b>
+			{% endfor %}
+			</div>
+            <table class="center">
                 {% for field in form.visible_fields %}
-                    <tr>
+                    <tr style="text-align:center">
                         <td>{{field.label_tag}}</td>
                         <td>{{field}}</td>
-                        <td class="error">
-                            {% for error in field.errors %} {{error}} {% endfor %}
-                        </td>
                     </tr>
                 {% endfor %}
             </table>
             {% csrf_token %}
+			<div class="regButton">
             <button type="submit" id="id_register_button">Submit</button>
+			</div>
         </form>
+		</div>
     
         {% for error in form.non_field_errors %}
             <p class="error">

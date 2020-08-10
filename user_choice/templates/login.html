@@ -5,20 +5,60 @@
 	    {% load static %}
         <title>{% block title %} Socialnetwork {% endblock %} </title>
     </head>
+	
+	<style>
+	table.center{
+	margin-left:auto;
+	margin-right:auto;
+	}
+	
+	.regButton{
+	margin-top: 10px;
+	}
+	
+	.tableSpacer{
+	margin-top: 50px;
+	}
+	
+	.paraHeader{
+	margin-top: 100px;
+	font-size: xx-large;
+	text-align:center;
+	font-weight:bold;
+	}
+	
+	.textHeader{
+	font-weight:normal;
+	text-align:center;
+	}
+	
+	.buttonCenter{
+	text-align:center;
+	}
+	</style>
+	
     
-    <body>
-        <p>Login</p>
-        <div>
-            <a href="{% url 'register' %}" id ="id_register_link">
-                <button>Register</button>
-            </a>
-        </div>
-        <form method="post" action="{% url 'login' %}">
-            <table>
-                {{form}}
-            </table>
-            {% csrf_token %}
-            <button type="submit" id="id_login_button">Submit</button>
-        </form>
+    <body class="buttonCenter">
+			<p class="paraHeader" >Login</p>
+			<b class="textHeader">Welcome to the XXXXXXX. Please log in or register for an account.</b>
+					<div class="regButton">
+			<a href="{% url 'register' %}" id ="id_register_link" >
+				<button>Register</button>
+			</a>
+		</div>
+
+        <div class="tableSpacer">
+			<form method="post" action="{% url 'login' %}">
+				<table class="center">
+					{{form}}
+				</table>
+				{% csrf_token %}
+				<div class="regButton">
+					<button type="submit" id="id_login_button">Submit</button>
+				<div/>
+			</form>
+		</div>
     </body>
+	
+
 </html>
