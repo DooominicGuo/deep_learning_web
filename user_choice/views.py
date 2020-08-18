@@ -12,7 +12,6 @@ from django.utils import timezone
 from user_choice.forms import LoginForm, RegistrationForm, ChosenForm
 from user_choice.models import Choice, Profile
 
-# Create your views here.
 
 # this method defines login action
 def login_action(request):
